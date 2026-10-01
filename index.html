@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Health Score</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div class="grid-overlay"></div>
+
+  <main class="app-shell">
+    <header class="hero">
+      <div class="brand-mark">
+        <span class="pulse-dot"></span>
+        AI HEALTH ANALYTICS
+      </div>
+      <h1>Mental Health <span>Score</span></h1>
+      <p>Enter the student's lifestyle and academic information to generate an AI-powered predicted score.</p>
+    </header>
+
+    <section class="dashboard">
+      <form id="predictionForm" class="form-card" novalidate>
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">STUDENT PROFILE</p>
+            <h2>Prediction inputs</h2>
+          </div>
+          <div class="live-badge"><span></span> LIVE MODEL</div>
+        </div>
+
+        <div id="errorBox" class="error-box" role="alert" aria-live="polite"></div>
+
+        <div class="section-label">Personal</div>
+        <div class="form-grid">
+          <label class="field">
+            <span>Age</span>
+            <input id="Age" name="Age" type="number" min="10" max="100" step="1" placeholder="e.g. 21" required>
+            <small>10–100 years</small>
+          </label>
+
+          <label class="field">
+            <span>Gender</span>
+            <select id="Gender" name="Gender" required>
+              <option value="">Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Country</span>
+            <input id="Country" name="Country" type="text" placeholder="e.g. Pakistan" required>
+          </label>
+
+          <label class="field">
+            <span>Academic level</span>
+            <select id="Academic_Level" name="Academic_Level" required>
+              <option value="">Select level</option>
+              <option>Undergraduate</option>
+              <option>Graduate</option>
+              <option>High School</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="section-label">Digital habits</div>
+        <div class="form-grid">
+          <label class="field">
+            <span>Most used platform</span>
+            <select id="Most_Used_Platform" name="Most_Used_Platform" required>
+              <option value="">Select platform</option>
+              <option>Facebook</option><option>LinkedIn</option><option>Instagram</option>
+              <option>Snapchat</option><option>Twitter</option><option>YouTube</option>
+              <option>TikTok</option><option>LINE</option><option>KakaoTalk</option>
+              <option>VKontakte</option><option>WhatsApp</option><option>WeChat</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Purpose of use</span>
+            <select id="Purpose_Of_Use" name="Purpose_Of_Use" required>
+              <option value="">Select purpose</option>
+              <option>Networking</option><option>Education</option>
+              <option>Entertainment</option><option>News</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Average daily usage <em>hours</em></span>
+            <input id="Avg_Daily_Usage_Hours" name="Avg_Daily_Usage_Hours" type="number" min="6" max="24" step="0.1" placeholder="e.g. 8" required>
+            <small>6–24 hours</small>
+          </label>
+
+          <label class="field">
+            <span>Daily unlocks</span>
+            <input id="Daily_Unlocks" name="Daily_Unlocks" type="number" min="0" max="1000" step="1" placeholder="e.g. 80" required>
+            <small>0–1000</small>
+          </label>
+        </div>
+
+        <div class="section-label">Lifestyle & wellbeing</div>
+        <div class="form-grid">
+          <label class="field">
+            <span>Study hours <em>per day</em></span>
+            <input id="Study_Hours" name="Study_Hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 4" required>
+          </label>
+
+          <label class="field">
+            <span>Physical activity <em>hours/day</em></span>
+            <input id="Physical_Activity_Hours" name="Physical_Activity_Hours" type="number" min="0" max="24" step="0.1" placeholder="e.g. 1.5" required>
+          </label>
+
+          <label class="field">
+            <span>Sleep <em>hours/night</em></span>
+            <input id="Sleep_Hours_Per_Night" name="Sleep_Hours_Per_Night" type="number" min="0" max="24" step="0.1" placeholder="e.g. 7" required>
+          </label>
+
+          <label class="field">
+            <span>Stress level</span>
+            <select id="Stress_Level" name="Stress_Level" required>
+              <option value="">Select stress level</option>
+              <option>Low</option><option>Medium</option>
+              <option>High</option><option>Very High</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="predictButton" class="predict-button" type="submit">
+          <span class="button-text">Generate prediction</span>
+          <span class="spinner"></span>
+          <span class="arrow">→</span>
+        </button>
+        <p class="form-note">Your input is sent to the FastAPI <code>/predict</code> endpoint.</p>
+      </form>
+
+      <aside class="result-card" id="resultCard">
+        <div class="result-glow"></div>
+        <div class="result-top">
+          <div>
+            <p class="eyebrow">MODEL OUTPUT</p>
+            <h2>Your result</h2>
+          </div>
+          <div class="status-icon">✦</div>
+        </div>
+
+        <div class="score-area">
+          <div class="score-ring" id="scoreRing">
+            <div class="ring-inner">
+              <span id="scoreValue">—</span>
+              <small>score</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-message" id="resultMessage">
+          <strong>Ready when you are.</strong>
+          <span>Complete the form and generate a prediction.</span>
+        </div>
+
+        <div class="result-line"><span>Model</span><b>Random Forest</b></div>
+        <div class="result-line"><span>Endpoint</span><b>/predict</b></div>
+        <div class="result-line"><span>Status</span><b id="apiStatus">Waiting</b></div>
+      </aside>
+    </section>
+
+    <footer>
+      <span>MENTAL HEALTH SCORE · ML + FASTAPI</span>
+      <span>Prediction is an AI model output, not a clinical diagnosis.</span>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
